@@ -1,12 +1,12 @@
 # Build the manager binaryFROM golang:1.13 as builder
 
-FROM golang:1.16 AS builder
-ARG TOPOLVM_OPERATOR_VERSION
+FROM golang:1.19 AS builder
+ARG NATIVE_STOR_VERSION
 COPY . /workdir
 WORKDIR /workdir
-RUN make build TOPOLVM_OPERATOR_VERSION=${TOPOLVM_OPERATOR_VERSION}
+RUN make build NATIVE_STOR_VERSION=${NATIVE_STOR_VERSION}
 
-FROM ubuntu:21.04
+FROM ubuntu:22.04
 RUN apt-get update && apt-get -y install gdisk udev
 COPY --from=builder /workdir/bin/topolvm /topolvm
 ENTRYPOINT ["/topolvm"]

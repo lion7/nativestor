@@ -1,14 +1,14 @@
-CONTROLLER_TOOLS_VERSION=0.7.0
-KUSTOMIZE_VERSION=3.8.7
+CONTROLLER_TOOLS_VERSION=0.8.0
+KUSTOMIZE_VERSION=4.5.5
 
 NATIVE_STOR_VERSION ?= devel
 
 SUDO=sudo
 BINDIR := $(PWD)/bin
-CSI_VERSION=1.5.0
+CSI_VERSION=1.6.0
 PROTOC := PATH=$(BINDIR):$(PATH) $(BINDIR)/protoc -I=$(shell pwd)/include:.
 CURL=curl -Lsf
-PROTOC_VERSION=3.15.0
+PROTOC_VERSION=21.5
 CONTROLLER_GEN := $(BINDIR)/controller-gen
 STATICCHECK := $(BINDIR)/staticcheck
 INEFFASSIGN := $(BINDIR)/ineffassign
@@ -34,10 +34,9 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 REGISTRY_PREFIX ?= docker.io
 IMAGE_PREFIX ?= alaudapublic/
-IMAGE_TAG_BASE ?= $(IMAGE_PREFIX)nativestor
+IMAGE_TAG_BASE ?= $(REGISTRY_PREFIX)/$(IMAGE_PREFIX)nativestor
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:$(NATIVE_STOR_VERSION)
-IMAGE ?= $(REGISTRY_PREFIX)/$(IMAGE_TAG_BASE):$(NATIVE_STOR_VERSION)
-IMG ?= $(REGISTRY_PREFIX)/$(BUNDLE_IMG)
+IMG ?= $(IMAGE_TAG_BASE):$(NATIVE_STOR_VERSION)
 
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 # ENVTEST_K8S_VERSION = 1.22
@@ -99,7 +98,7 @@ test: manifests generate fmt vet envtest ## Run tests.
 	$(INEFFASSIGN) ./...
 	$(SUDO) go test -race -v $$(go list ./... | grep -v vendor | grep -v e2e)
 
-example: manifests generate ## Generate yaml manifests for operator deployment
+example: kustomize manifests generate ## Generate yaml manifests for operator deployment
 	mkdir -p deploy/example
 	@echo Change value of operator-hub in manager manifest
 	$(KUSTOMIZE) build config/default | sed -e 's,value: "1",value: "0",' > deploy/example/operator.yaml
@@ -124,20 +123,11 @@ build: fmt vet ## Build  nativestor binary.
 run: manifests generate fmt vet ## Run a controller from your host (Not Applicable).
 	go run ./main.go
 
-docker-build: test ## Build docker image with the manager.
-	docker build -t ${IMG} .
+docker-build: # test ## Build docker image with the manager.
+	docker build -t ${IMG} --build-arg NATIVE_STOR_VERSION=$(NATIVE_STOR_VERSION) .
 
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
-
-image: ## Build docker image of  nativestor:devel.
-	docker build -t $(IMAGE_PREFIX)nativestor:devel --build-arg NATIVE_STOR_VERSION=$(NATIVE_STOR_VERSION) .
-
-tag: ## Tag docker image of  nativestor:devel.
-	docker tag $(IMAGE_PREFIX)nativestor:devel $(IMAGE_PREFIX)nativestor:$(IMAGE_TAG)
-
-push: ## Push tagged docker image of  nativestor
-	docker push $(IMAGE_PREFIX)nativestor:$(IMAGE_TAG)
 
 ##@ Deployment
 
@@ -160,23 +150,19 @@ controller-gen: ## Download controller-gen locally if necessary.
 
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 kustomize: ## Download kustomize locally if necessary.
-	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v$(KUSTOMIZE_VERSION))
+	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v4@v$(KUSTOMIZE_VERSION))
 
 ENVTEST = $(shell pwd)/bin/setup-envtest
 envtest: ## Download envtest-setup locally if necessary.
 	$(call go-get-tool,$(ENVTEST),sigs.k8s.io/controller-runtime/tools/setup-envtest@latest)
 
-# go-get-tool will 'go get' any package $2 and install it to $1.
+# go-get-tool will 'go install' any package $2 and install it to $1.
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 define go-get-tool
 @[ -f $(1) ] || { \
 set -e ;\
-TMP_DIR=$$(mktemp -d) ;\
-cd $$TMP_DIR ;\
-go mod init tmp ;\
 echo "Downloading $(2)" ;\
-GOBIN=$(PROJECT_DIR)/bin go get $(2) ;\
-rm -rf $$TMP_DIR ;\
+GOBIN=$(PROJECT_DIR)/bin go install $(2) ;\
 }
 endef
 
