@@ -3,7 +3,6 @@ kind: TopolvmCluster
 metadata:
   name: topolvmcluster-sample
 spec:
-  topolvmVersion: "quay.io/topolvm/topolvm-with-sidecar:0.10.2"
   storage:
     useAllNodes: false
     useAllDevices: false

@@ -16,8 +16,8 @@ Setup environment
 How to run tests
 ----------------
 
-if you want to provide your own topolvm image, please edit the [cluster.yaml](./manifest/cluster.yaml), 
-change the spec.topolvmVersion field
+if you want to provide your own topolvm image, please edit the [setting.yaml](./manifest/cluster.yaml), 
+change the `TOPOLVM_IMAGE` field
 
 run as follows:
 

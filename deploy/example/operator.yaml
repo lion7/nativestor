@@ -310,12 +310,9 @@ spec:
                 - useAllNodes
                 - useLoop
                 type: object
-              topolvmVersion:
-                type: string
             required:
             - cleanup
             - storage
-            - topolvmVersion
             type: object
           status:
             description: TopolvmClusterStatus defines the observed state of TopolvmCluster

@@ -13,7 +13,6 @@ import (
 	"github.com/alauda/nativestor/pkg/operator/topolvm/csidriver"
 	"github.com/alauda/nativestor/pkg/operator/topolvm/metric"
 	"github.com/alauda/nativestor/pkg/operator/topolvm/monitor"
-	"github.com/alauda/nativestor/pkg/operator/topolvm/psp"
 	"github.com/alauda/nativestor/pkg/operator/topolvm/volumegroup"
 	"github.com/coreos/pkg/capnslog"
 	"github.com/pkg/errors"
@@ -99,7 +98,6 @@ func (r *TopolvmController) reconcile(request reconcile.Request) (reconcile.Resu
 	}
 
 	topolvm.ClusterName = request.NamespacedName.Name
-	topolvm.TopolvmImage = topolvmCluster.Spec.TopolvmVersion
 	topolvm.CertsSecret = topolvmCluster.Spec.CertsSecret
 
 	// Set a finalizer so we can do cleanup before the object goes away

@@ -29,8 +29,6 @@ metadata:
   # namespace must be the same with topolvm-operator
   namespace: nativestor-system
 spec:
-  # Add fields here
-  topolvmVersion: alaudapublic/topolvm:2.0.0
   # certsSecret: mutatingwebhook
   storage:
     useAllNodes: true
@@ -41,7 +39,6 @@ spec:
 ```
 `namespace` must be the same with the namespace of operator. one and only one class in a node must set `default` to true.
 a kubernetes cluster only existing a TopolvmCluster , not support multi TopolvmClusters.
-`topolvmVersion` topolvm image version, the image include csi sidecar.
 `certsSecret` optional attribute. Used to provide the name of a [TLS secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) which will be used for secure topolvm-controller mutating webhook. If not provided a self-signed certificate will be generated automatically.
 `useAllNodes` use all nodes of kubernetes cluster, default false.
 `useAllDevices` use all available devices of each node, default false.
@@ -59,8 +56,6 @@ metadata:
   # namespace must be the same with topolvm-operator
   namespace: nativestor-system
 spec:
-  # Add fields here
-  topolvmVersion: alaudapublic/topolvm:2.0.0
   # certsSecret: mutatingwebhook
   storage:
     useAllNodes: true
@@ -86,8 +81,6 @@ metadata:
   # namespace must be the same with topolvm-operator
   namespace: nativestor-system
 spec:
-  # Add fields here
-  topolvmVersion: alaudapublic/topolvm:2.0.0
   # certsSecret: mutatingwebhook
   storage:
     useAllNodes: false
@@ -229,7 +222,6 @@ metadata:
   name: topolvmcluster-sample
   namespace: nativestor-system
 spec:
-  topolvmVersion: alaudapublic/topolvm:2.0.0
   # certsSecret: mutatingwebhook
   storage:
     useAllNodes: false
@@ -350,8 +342,6 @@ metadata:
   # namespace must be the same with topolvm-operator
   namespace: nativestor-system
 spec:
-  # Add fields here
-  topolvmVersion: alaudapublic/topolvm:2.0.0
   # certsSecret: mutatingwebhook
   storage:
     useAllNodes: false

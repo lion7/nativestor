@@ -4,7 +4,6 @@ metadata:
   name: topolvmcluster-sample
   namespace: nativestor-system
 spec:
-  topolvmVersion: quay.io/topolvm/topolvm-with-sidecar:0.10
   cleanup: false
   storage:
     useAllNodes: false

@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	DefaultTopolvmImage = "quay.io/topolvm/topolvm-with-sidecar:0.10"
+	DefaultTopolvmImage = "quay.io/topolvm/topolvm-with-sidecar:0.15.1"
 )
 
 const (

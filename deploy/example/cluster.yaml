@@ -5,8 +5,6 @@ metadata:
   # namespace must be the same with topolvm-operator
   namespace: nativestor-system
 spec:
-  # Add fields here
-  topolvmVersion: quay.io/topolvm/topolvm-with-sidecar:0.10
   # Certs secret must contain a tls certificate and key which will be used by the topolvm-controller
   # certsSecret: mutatingwebhook
   storage:

@@ -19,7 +19,6 @@ package topolvm
 import "time"
 
 var (
-	TopolvmImage          string
 	CertsSecret           string
 	NameSpace             string
 	ClusterName           string
