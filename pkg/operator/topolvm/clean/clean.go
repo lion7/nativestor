@@ -66,7 +66,7 @@ func cleanVgs(executor exec.Executor, vgs map[string]string, pvs map[string]stri
 	for _, vg := range vgs {
 		res, err := sys.GetPhysicalVolume(executor, vg)
 		if err == nil {
-			for k, _ := range res {
+			for k := range res {
 				delete(pvs, k)
 			}
 		}

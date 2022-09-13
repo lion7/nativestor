@@ -22,7 +22,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -139,7 +138,7 @@ func (*CommandExecutor) ExecuteCommandWithCombinedOutput(command string, arg ...
 func (*CommandExecutor) ExecuteCommandWithOutputFileTimeout(timeout time.Duration,
 	command, outfileArg string, arg ...string) (string, error) {
 
-	outFile, err := ioutil.TempFile("", "")
+	outFile, err := os.CreateTemp("", "")
 	if err != nil {
 		return "", fmt.Errorf("failed to open output file: %+v", err)
 	}
@@ -169,7 +168,7 @@ func (*CommandExecutor) ExecuteCommandWithOutputFileTimeout(timeout time.Duratio
 		return string(cmdOut), err
 	}
 
-	fileOut, err := ioutil.ReadAll(outFile)
+	fileOut, err := io.ReadAll(outFile)
 	if err := outFile.Close(); err != nil {
 		return "", err
 	}
@@ -182,7 +181,7 @@ func (*CommandExecutor) ExecuteCommandWithOutputFile(command, outfileArg string,
 
 	// create a temporary file to serve as the output file for the command to be run and ensure
 	// it is cleaned up after this function is done
-	outFile, err := ioutil.TempFile("", "")
+	outFile, err := os.CreateTemp("", "")
 	if err != nil {
 		return "", fmt.Errorf("failed to open output file: %+v", err)
 	}
@@ -208,7 +207,7 @@ func (*CommandExecutor) ExecuteCommandWithOutputFile(command, outfileArg string,
 	}
 
 	// read the entire output file and return that to the caller
-	fileOut, err := ioutil.ReadAll(outFile)
+	fileOut, err := io.ReadAll(outFile)
 	if err := outFile.Close(); err != nil {
 		return "", err
 	}
