@@ -16,6 +16,7 @@ func testRawDeviceDelete() {
 		Expect(err).ShouldNot(HaveOccurred())
 		var rawdevices rawv1.RawDeviceList
 		err = json.Unmarshal(stdout, &rawdevices)
+		Expect(err).ShouldNot(HaveOccurred())
 		var rawdevice rawv1.RawDevice
 		for _, dev := range rawdevices.Items {
 			if dev.Spec.Available && dev.Status.Name == "" {
