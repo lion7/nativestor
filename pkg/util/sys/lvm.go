@@ -19,6 +19,8 @@ package sys
 import (
 	"errors"
 	"fmt"
+	"k8s.io/apimachinery/pkg/util/rand"
+	"k8s.io/utils/strings/slices"
 	"strconv"
 	"strings"
 
@@ -28,8 +30,9 @@ import (
 )
 
 const (
-	nsenter = "nsenter"
-	lvm     = "lvm"
+	nsenter      = "nsenter"
+	lvm          = "lvm"
+	pvUuidPrefix = "native-stor"
 )
 
 type VolumeGroup struct {
@@ -226,19 +229,31 @@ func CreateVolumeGroup(executor exec.Executor, disks []topolvmv2.Disk, volumeGro
 
 	diskList := make([]string, 0)
 	for _, dev := range disks {
-		err := wrapExecCommand(executor, lvm, "pvcreate", dev.Name)
+		uuid := pvUuidPrefix + rand.String(33-len(pvUuidPrefix))
+		err := wrapExecCommand(executor, lvm, "pvcreate", dev.Name, "--uuid", uuid, "--norestorefile")
 		if err != nil {
 			return err
 		}
 		diskList = append(diskList, dev.Name)
 	}
 
+	// also consider PVs created by nativestor during earlier runs
+	output, err := parseOutput(executor, "pvs", "pv_name,pv_uuid")
+	if err != nil {
+		return err
+	}
+	for _, e := range output {
+		name := e["pv_name"]
+		uuid := e["pv_uuid"]
+		if strings.HasPrefix(uuid, pvUuidPrefix) && !slices.Contains(diskList, name) {
+			diskList = append(diskList, name)
+		}
+	}
+
 	cmd := []string{"vgcreate", volumeGroupName}
 	cmd = append(cmd, diskList...)
 
-	err := wrapExecCommand(executor, lvm, cmd...)
-
-	return err
+	return wrapExecCommand(executor, lvm, cmd...)
 }
 
 // parseOutput calls lvm family and parses output from it.
