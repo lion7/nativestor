@@ -3,7 +3,7 @@ module github.com/alauda/nativestor
 go 1.16
 
 require (
-	github.com/banzaicloud/k8s-objectmatcher v1.6.1
+	github.com/banzaicloud/k8s-objectmatcher v1.8.0
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f
 	github.com/google/go-cmp v0.5.6
 	github.com/google/uuid v1.1.2

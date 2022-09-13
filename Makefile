@@ -123,7 +123,7 @@ build: fmt vet ## Build  nativestor binary.
 run: manifests generate fmt vet ## Run a controller from your host (Not Applicable).
 	go run ./main.go
 
-docker-build: # test ## Build docker image with the manager.
+docker-build: test ## Build docker image with the manager.
 	docker build -t ${IMG} --build-arg NATIVE_STOR_VERSION=$(NATIVE_STOR_VERSION) .
 
 docker-push: ## Push docker image with the manager.
