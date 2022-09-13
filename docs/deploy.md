@@ -28,16 +28,16 @@ data:
   RAW_DEVICE_ENABLE: "true"
   TOPOLVM_ENABLE: "true"
   RAW_DEVICE_IMAGE: "docker.io/alaudapublic/raw-device:v1.0.0"
-  TOPOLVM_IMAGE: "quay.io/topolvm/topolvm-with-sidecar:0.10"
+  TOPOLVM_IMAGE: "quay.io/topolvm/topolvm-with-sidecar:0.15.1"
   # Set replicas for csi provisioner deployment.
   CSI_PROVISIONER_REPLICAS: "2"
   CSI_LOG_LEVEL: "3"
-  CSI_REGISTRAR_IMAGE: "k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0"
-  CSI_RESIZER_IMAGE: "k8s.gcr.io/sig-storage/csi-resizer:v1.3.0"
-  CSI_PROVISIONER_IMAGE: "k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0"
+  CSI_REGISTRAR_IMAGE: "k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.5.1"
+  CSI_RESIZER_IMAGE: "k8s.gcr.io/sig-storage/csi-resizer:v1.5.0"
+  CSI_PROVISIONER_IMAGE: "k8s.gcr.io/sig-storage/csi-provisioner:v3.2.1"
   CSI_SNAPSHOTTER_IMAGE: "k8s.gcr.io/sig-storage/csi-snapshotter:v4.2.0"
-  CSI_ATTACHER_IMAGE: "k8s.gcr.io/sig-storage/csi-attacher:v3.3.0"
-  CSI_LIVENESS_IMAGE: "k8s.gcr.io/sig-storage/livenessprobe:v2.4.0"
+  CSI_ATTACHER_IMAGE: "k8s.gcr.io/sig-storage/csi-attacher:v6.0.1"
+  CSI_LIVENESS_IMAGE: "k8s.gcr.io/sig-storage/livenessprobe:v2.7.0"
 ```
 If you want to use topolvm you should set `TOPOLVM_ENABLE` to be `true`  
 if you want to use rawdevice you should set `RAW_DEVICE_ENABLE` to be `true`.  

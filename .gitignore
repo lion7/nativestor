@@ -24,6 +24,7 @@ testbin/*
 *~
 
 vendor/**/*
+include/
 e2e/build/*
 e2e/tmpbin/*
 e2e/certs/*
