@@ -144,7 +144,7 @@ func RemoveVolumeGroup(executor exec.Executor, vgName string) error {
 	if err != nil {
 		return err
 	}
-	args := []string{"vgremove", vgName}
+	args := []string{"vgremove", vgName, "--config", "backup { archive = 0 }"}
 	err = wrapExecCommand(executor, lvm, args...)
 	if err != nil {
 		return err
@@ -193,7 +193,7 @@ func ShrinkVolumeGroup(executor exec.Executor, vgName string, pvs []string) erro
 
 func ExpandVolumeGroup(executor exec.Executor, vgName string, pvs []string) error {
 
-	args := []string{"vgextend", vgName}
+	args := []string{"vgextend", vgName, "-An"}
 
 	args = append(args, pvs...)
 
@@ -250,7 +250,7 @@ func CreateVolumeGroup(executor exec.Executor, disks []topolvmv2.Disk, volumeGro
 		}
 	}
 
-	cmd := []string{"vgcreate", volumeGroupName}
+	cmd := []string{"vgcreate", volumeGroupName, "-An"}
 	cmd = append(cmd, diskList...)
 
 	return wrapExecCommand(executor, lvm, cmd...)
