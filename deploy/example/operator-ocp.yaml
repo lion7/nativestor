@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   labels:
     app.kubernetes.io/name: nativestor-system
+    pod-security.kubernetes.io/enforce: privileged
     topolvm.cybozu.com/webhook: ignore
   name: nativestor-system
 ---

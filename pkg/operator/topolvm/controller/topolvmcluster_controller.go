@@ -354,11 +354,6 @@ func (r *TopolvmController) onAdd(topolvmCluster *topolvmv2.TopolvmCluster, ref 
 			logger.Errorf("CheckTopolvmCsiDriverExisting failed err %v", err)
 			return err
 		}
-		err = checkAndCreatePsp(r.context.Clientset, ref)
-		if err != nil {
-			logger.Errorf("checkAndCreatePsp failed err %v", err)
-			return err
-		}
 	}
 	// Start the main topolvm cluster orchestration
 	if err := r.startPrepareVolumeGroupJob(topolvmCluster, ref); err != nil {
@@ -525,38 +520,5 @@ func cleanLvmdConfigmap(clientset kubernetes.Interface, namespace string) error 
 			return err
 		}
 	}
-	return nil
-}
-
-func checkAndCreatePsp(clientset kubernetes.Interface, ref *metav1.OwnerReference) error {
-
-	existing, err := psp.CheckPspExisting(clientset, topolvm.TopolvmNodePSP)
-	if err != nil {
-		return errors.Wrapf(err, "check psp %s failed", topolvm.TopolvmNodePSP)
-	}
-
-	if !existing {
-		err = psp.CreateTopolvmNodePsp(clientset, ref)
-		if err != nil {
-			return errors.Wrapf(err, "create psp %s failed", topolvm.TopolvmNodePSP)
-		}
-	} else {
-		logger.Infof("psp %s existing", topolvm.TopolvmNodePSP)
-	}
-
-	existing, err = psp.CheckPspExisting(clientset, topolvm.TopolvmPrepareVgPSP)
-	if err != nil {
-		return errors.Wrapf(err, "check psp %s failed", topolvm.TopolvmPrepareVgPSP)
-	}
-
-	if !existing {
-		err = psp.CreateTopolvmPrepareVgPsp(clientset, ref)
-		if err != nil {
-			return errors.Wrapf(err, "create psp %s failed", topolvm.TopolvmPrepareVgPSP)
-		}
-	} else {
-		logger.Infof("psp %s existing", topolvm.TopolvmPrepareVgPSP)
-	}
-
 	return nil
 }

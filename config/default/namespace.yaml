@@ -4,4 +4,5 @@ metadata:
   name: nativestor-system
   labels:
     app.kubernetes.io/name: nativestor-system
+    pod-security.kubernetes.io/enforce: privileged
     topolvm.cybozu.com/webhook: ignore
